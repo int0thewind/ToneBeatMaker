@@ -38,12 +38,10 @@ function BeatMakerContainer() {
   const classes = beatMakerContainerStyle();
   const [ cardCount, setCardCount ] = React.useState(6);
   const incCount = () => {
-    if (cardCount < 8)
-      setCardCount(cardCount + 1);
+    setCardCount(cardCount + 1);
   }
   const decCount = () => {
-    if (cardCount > 1)
-      setCardCount(cardCount - 1);
+    setCardCount(cardCount - 1);
   }
 
   return (
@@ -66,7 +64,7 @@ function BeatMakerContainer() {
   )
 }
 
-const beatMakerCardStyle = makeStyles((theme) => ({
+const beatMakerCardStyle = makeStyles({
   beatMakerCard: {
     height: '40pt',
     borderRadius: '8pt',
@@ -81,7 +79,7 @@ const beatMakerCardStyle = makeStyles((theme) => ({
       width ${ANIMATION_DURATION} ease-in-out,
       background-color ${ANIMATION_DURATION} ease-out`,
   }
-}))
+});
 
 function BeatMakerCard(props) {
   const classes = beatMakerCardStyle(props);
