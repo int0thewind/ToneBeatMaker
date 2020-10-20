@@ -1,4 +1,4 @@
-# Tone-beat
+# Tone-Beat-Maker
 
 A simple beat player on web.
 
