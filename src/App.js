@@ -7,11 +7,9 @@ import BeatMakerContainer from './BeatMaker';
 function App() {
   const [ isDarkMode, setDarkMode ] = React.useState(false);
   const autoTheme = createMuiTheme({
-    palette: {
-      type: isDarkMode ? 'dark' : 'light'
-    }
+    palette: { type: isDarkMode ? 'dark' : 'light' }
   });
-  const changeTheme = () => {setDarkMode(!isDarkMode)};
+  const changeTheme = () => setDarkMode(!isDarkMode);
 
   return (
     <ThemeProvider theme={autoTheme}>
@@ -22,9 +20,7 @@ function App() {
 }
 
 const topBarStyle = makeStyles({
-  barTitle: {
-    flexGrow: '1',
-  }
+  barTitle: { flexGrow: '1'}
 })
 
 function TopBar(props) {
@@ -38,11 +34,11 @@ function TopBar(props) {
           {props.isDarkMode ? <BrightnessHigh/> : <Brightness2/>}
         </IconButton>
         <IconButton color='inherit'>
-          <Info />
+          <Info/>
         </IconButton>
       </Toolbar>
     </AppBar>
-  )
+  );
 }
 
 const appAreaStyle = makeStyles((theme) => ({
@@ -60,7 +56,7 @@ function AppArea() {
     <div className={classes.appBackground}>
       <BeatMakerContainer/>
     </div>
-  )
+  );
 }
 
 export default App;

@@ -9,7 +9,9 @@ const ANIMATION_DURATION = '0.15s';
 
 const MARGIN = '4pt 4pt 4pt 4pt';
 
-const beatMakerContainerStyle = makeStyles((theme) => ({
+const NO_MARGIN = '0pt 0pt 0pt 0pt';
+
+const beatMakerContainerStyle = makeStyles({
   beatMakerPaper: {
     display: 'flex',
     flexDirection: 'column',
@@ -22,27 +24,19 @@ const beatMakerContainerStyle = makeStyles((theme) => ({
     width: '90vw',
     position: "fixed",
     bottom: 0,
-  },
-  beatMakerBoard: {
+  }, beatMakerBoard: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     margin: MARGIN
-  },
-  beatMakerButtonGroup: {
-    margin: MARGIN
-  }
-}))
+  }, beatMakerButtonGroup: { margin: MARGIN }
+});
 
 function BeatMakerContainer() {
   const classes = beatMakerContainerStyle();
   const [ cardCount, setCardCount ] = React.useState(6);
-  const incCount = () => {
-    setCardCount(cardCount + 1);
-  }
-  const decCount = () => {
-    setCardCount(cardCount - 1);
-  }
+  const incCount = () => setCardCount(cardCount + 1);
+  const decCount = () => setCardCount(cardCount - 1);
 
   return (
     <Paper className={classes.beatMakerPaper} elevation='4'>
@@ -69,11 +63,9 @@ const beatMakerCardStyle = makeStyles({
     height: '40pt',
     borderRadius: '8pt',
     width: props => props.toDisplay ? '84pt' : '0pt',
-    margin: props => props.toDisplay ? MARGIN : '0pt 0pt 0pt 0pt',
+    margin: props => props.toDisplay ? MARGIN : NO_MARGIN,
     backgroundColor: props => props.color[500],
-    '&:hover': {
-      backgroundColor: props => props.color[200]
-    },
+    '&:hover': { backgroundColor: props => props.color[200] },
     opacity: props => props.toDisplay ? '1' : '0',
     transition: `opacity ${ANIMATION_DURATION} ease-in-out,
       width ${ANIMATION_DURATION} ease-in-out,
