@@ -48,12 +48,16 @@ const useStyle = makeStyles((theme) => ({
     backgroundColor: theme.palette.background.default,
     width: '100%',
     height: '100%'
+  },
+  playButton: {
+
   }
 }));
 
 function AppArea() {
   const classes = useStyle();
-  return(
+  
+  return (
     <div className={classes.appBackground}>
       <BeatMakerContainer/>
     </div>
