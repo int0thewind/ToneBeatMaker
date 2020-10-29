@@ -5,7 +5,8 @@ import React from 'react';
 import BeatMakerContainer from './BeatMaker';
 
 function App() {
-  const [ isDarkMode, setDarkMode ] = React.useState(false);
+  const isCurrentDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const [ isDarkMode, setDarkMode ] = React.useState(isCurrentDarkMode);
   const autoTheme = createMuiTheme({
     palette: { type: isDarkMode ? 'dark' : 'light' }
   });

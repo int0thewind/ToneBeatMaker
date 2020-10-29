@@ -51,8 +51,8 @@ function BeatMakerContainer() {
         <BeatMakerCard keyCode='8' tone='C5' toDisplay={8 <= cardCount} color={brown}/>
       </div>
       <ButtonGroup size='medium' variant='contained' color='primary' className={classes.beatMakerButtonGroup}>
-        <Button onClick={incCount} disabled={cardCount === 8}> + </Button>
         <Button onClick={decCount} disabled={cardCount === 1}> - </Button>
+        <Button onClick={incCount} disabled={cardCount === 8}> + </Button>
       </ButtonGroup>
     </Paper>
   )
