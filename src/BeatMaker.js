@@ -1,9 +1,11 @@
 import React from 'react';
-import { makeStyles, Button, ButtonGroup, Paper, Card } from '@material-ui/core';
+import { makeStyles, Button, ButtonGroup, Paper, Card, TextField } from '@material-ui/core';
 import { PlayArrow } from '@material-ui/icons';
 import { red, orange, yellow, lime, green, blue, purple, brown } from '@material-ui/core/colors'
+import { Dialog, DialogTitle, DialogContent, DialogActions } from '@material-ui/core';
 import * as Tone from 'tone';
 import PropTypes from 'prop-types';
+import tet from './lib/tet/tet';
 
 const PLAYBACK_DURATION = '0.1';
 
@@ -53,18 +55,18 @@ function BeatMakerContainer() {
       { isStarted ?
         <>
         <div className={classes.beatMakerBoard}>
-          <BeatMakerCard keyCode='1' tone='C4' toDisplay={1 <= cardCount} color={red}/>
-          <BeatMakerCard keyCode='2' tone='D4' toDisplay={2 <= cardCount} color={orange}/>
-          <BeatMakerCard keyCode='3' tone='E4' toDisplay={3 <= cardCount} color={yellow}/>
-          <BeatMakerCard keyCode='4' tone='F4' toDisplay={4 <= cardCount} color={lime}/>
-          <BeatMakerCard keyCode='5' tone='G4' toDisplay={5 <= cardCount} color={green}/>
-          <BeatMakerCard keyCode='6' tone='A4' toDisplay={6 <= cardCount} color={blue}/>
-          <BeatMakerCard keyCode='7' tone='B4' toDisplay={7 <= cardCount} color={purple}/>
-          <BeatMakerCard keyCode='8' tone='C5' toDisplay={8 <= cardCount} color={brown}/>
+          <BeatMakerCard keyCode='1' pitch='C4' toDisplay={1 <= cardCount} color={red}/>
+          <BeatMakerCard keyCode='2' pitch='D4' toDisplay={2 <= cardCount} color={orange}/>
+          <BeatMakerCard keyCode='3' pitch='E4' toDisplay={3 <= cardCount} color={yellow}/>
+          <BeatMakerCard keyCode='4' pitch='F4' toDisplay={4 <= cardCount} color={lime}/>
+          <BeatMakerCard keyCode='5' pitch='G4' toDisplay={5 <= cardCount} color={green}/>
+          <BeatMakerCard keyCode='6' pitch='A4' toDisplay={6 <= cardCount} color={blue}/>
+          <BeatMakerCard keyCode='7' pitch='B4' toDisplay={7 <= cardCount} color={purple}/>
+          <BeatMakerCard keyCode='8' pitch='C5' toDisplay={8 <= cardCount} color={brown}/>
         </div>
         <ButtonGroup size='medium' variant='contained' color='primary' className={classes.beatMakerButtonGroup}>
-          <Button onClick={decCount} disabled={cardCount === 1} size='large'> - </Button>
-          <Button onClick={incCount} disabled={cardCount === 8} size='large'> + </Button>
+          <Button onClick={decCount} disabled={cardCount === 1}> - </Button>
+          <Button onClick={incCount} disabled={cardCount === 8}> + </Button>
         </ButtonGroup>
         </> :
         <Button variant='contained' color='secondary' onClick={startPlaying} startIcon={<PlayArrow />}>
@@ -90,28 +92,77 @@ const beatMakerCardStyle = makeStyles({
   }
 });
 
+function checkPitchValid(pitch) {
+  try {
+    // eslint-disable-next-line no-unused-vars
+    const _ = (!(typeof pitch === 'string' &&
+      pitch.match(/^[A-G]((#|b)?)(00|[0-9])$/gm)[0] === pitch))
+    tet.pitchToMidi(pitch)
+  } catch (error) {
+    return false;
+  }
+  return true;
+}
+
 function BeatMakerCard(props) {
   const classes = beatMakerCardStyle(props);
   const synth = new Tone.Synth().toDestination();
+
+  const [ pitch, setPitch ] = React.useState(props.pitch);
+  const [ isPitchValid, setPitchValid ] = React.useState(true);
+
+  const [ settingOpen, setSettingOpen ] = React.useState(false);
+  const openSetting = () => setSettingOpen(true);
+  const closeSetting = () => setSettingOpen(false);
   
-  const mouseClickPlay = () => {
-    synth.triggerAttackRelease(props.tone, PLAYBACK_DURATION);
+  const mouseClick = () => synth.triggerAttackRelease(pitch, PLAYBACK_DURATION);
+  const doubleMouseClick = () => openSetting();
+
+  const textFieldOnChange = (e) => {
+    let newPitch = e.target.value;
+    setPitchValid(checkPitchValid(newPitch));
+    setPitch(newPitch);
   }
 
   return (
-    <Card
-      raised={true}
-      className={classes.beatMakerCard}
-      onClick={mouseClickPlay}>
-    </Card>
+    <>
+      <Card
+        raised={true}
+        className={classes.beatMakerCard}
+        onClick={mouseClick}
+        onDoubleClick={doubleMouseClick}
+      />
+      <Dialog
+        disableBackdropClick={true}
+        disableEscapeKeyDown={true}
+        open={settingOpen}
+      >
+        <DialogTitle>
+          {`Change tone for Key${props.keyCode}`}
+        </DialogTitle>
+        <DialogContent>
+          <TextField
+            label='Input New Pitch'
+            variant='outlined'
+            value={pitch}
+            onChange={textFieldOnChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={closeSetting} color='primary' disabled={!isPitchValid}>
+            Ok
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </>
   )
 }
 
 BeatMakerCard.propTypes = {
-  keyCode: PropTypes.string,
-  tone: PropTypes.string,
-  toDisplay: PropTypes.bool,
-  color: PropTypes.object, // Mui colors is a pure object, no types. 
+  keyCode: PropTypes.string.isRequired,
+  pitch: PropTypes.string.isRequired,
+  toDisplay: PropTypes.bool.isRequired,
+  color: PropTypes.object.isRequired, // Mui colors is a pure object, no types. 
 }
 
 export default BeatMakerContainer;
