@@ -3,6 +3,7 @@ import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
 import { BrightnessHigh, Brightness2, Info } from '@material-ui/icons';
 import React from 'react';
 import BeatMakerContainer from './BeatMaker';
+import PropTypes from 'prop-types';
 
 function App() {
   const isCurrentDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -40,6 +41,11 @@ function TopBar(props) {
       </Toolbar>
     </AppBar>
   );
+}
+
+TopBar.propTypes = {
+  isDarkMode: PropTypes.bool,
+  changeTheme: PropTypes.func
 }
 
 const appAreaStyle = makeStyles((theme) => ({
