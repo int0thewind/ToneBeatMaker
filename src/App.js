@@ -1,5 +1,6 @@
 import { createMuiTheme, makeStyles, ThemeProvider } from '@material-ui/core';
 import { AppBar, Toolbar, Typography, IconButton } from '@material-ui/core';
+import { Dialog, DialogTitle, DialogContent, DialogContentText } from '@material-ui/core';
 import { BrightnessHigh, Brightness2, Info } from '@material-ui/icons';
 import React from 'react';
 import BeatMakerContainer from './BeatMaker';
@@ -27,6 +28,10 @@ const topBarStyle = makeStyles({
 
 function TopBar(props) {
   const classes = topBarStyle();
+  const [ dialogOpen, setDialogOpen ] = React.useState(false);
+
+  const openDialog = () => setDialogOpen(true);
+  const closeDialog = () => setDialogOpen(false);
 
   return (
     <AppBar position='sticky'>
@@ -35,10 +40,20 @@ function TopBar(props) {
         <IconButton onClick={props.changeTheme} color='inherit'>
           {props.isDarkMode ? <BrightnessHigh/> : <Brightness2/>}
         </IconButton>
-        <IconButton color='inherit'>
+        <IconButton color='inherit' onClick={openDialog}>
           <Info/>
         </IconButton>
       </Toolbar>
+      <Dialog open={dialogOpen} onClose={closeDialog}>
+        <DialogTitle>
+          Tone Beat Maker Info
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Click on each block to play sound.<br /> Long click to customize each block's setting.
+          </DialogContentText>
+        </DialogContent>
+      </Dialog>
     </AppBar>
   );
 }
