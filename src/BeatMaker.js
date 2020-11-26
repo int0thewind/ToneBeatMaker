@@ -108,7 +108,18 @@ function BeatMakerCard(props) {
   const classes = beatMakerCardStyle(props);
   const synth = new Tone.Synth().toDestination();
 
-  const [ pitch, setPitch ] = React.useState(props.pitch);
+  const getPitch = () => {
+    const query = window.localStorage.getItem(`KeyCode${props.keyCode}`);
+    return query === null ?
+      props.pitch :
+      JSON.parse(query).pitch;
+  }
+  const storePitch = (newPitch) => {
+    const toStore = JSON.stringify({pitch: newPitch});
+    window.localStorage.setItem(`KeyCode${props.keyCode}`, toStore);
+  }
+
+  const [ pitch, setPitch ] = React.useState(getPitch());
   const [ isPitchValid, setPitchValid ] = React.useState(true);
 
   const [ settingOpen, setSettingOpen ] = React.useState(false);
@@ -120,8 +131,11 @@ function BeatMakerCard(props) {
 
   const textFieldOnChange = (e) => {
     let newPitch = e.target.value;
-    setPitchValid(checkPitchValid(newPitch));
+    let isValid = checkPitchValid(newPitch);
+    setPitchValid(isValid);
     setPitch(newPitch);
+    if (isValid)
+      storePitch(newPitch);
   }
 
   return (
